@@ -16,7 +16,7 @@
 
 		<!-- App Identifier -->
 		<ApplicationId>com.companyname.mauinodeeditor.sample</ApplicationId>
-		<ApplicationIdGuid>b544ef09-7976-4c50-ae18-465c6a05c824</ApplicationIdGuid>
+		<ApplicationIdGuid>7a48ef21-7fcb-4f93-80d5-ec34a2a0c26c</ApplicationIdGuid>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -50,10 +50,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\MauiNodeEditor\MauiNodeEditor.csproj" />
 	</ItemGroup>
 
 </Project>

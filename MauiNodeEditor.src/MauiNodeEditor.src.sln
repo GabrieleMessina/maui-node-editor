@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MauiNodeEditor", "MauiNodeEditor\MauiNodeEditor.csproj", "{B78B2338-CF57-40C6-998A-B2A338C799EC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MauiNodeEditor", "MauiNodeEditor\MauiNodeEditor.csproj", "{51757B56-F963-4605-A182-559CB4BE7BB0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B78B2338-CF57-40C6-998A-B2A338C799EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B78B2338-CF57-40C6-998A-B2A338C799EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B78B2338-CF57-40C6-998A-B2A338C799EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B78B2338-CF57-40C6-998A-B2A338C799EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51757B56-F963-4605-A182-559CB4BE7BB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51757B56-F963-4605-A182-559CB4BE7BB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51757B56-F963-4605-A182-559CB4BE7BB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51757B56-F963-4605-A182-559CB4BE7BB0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {F4C3042F-C20F-4A38-9E9C-46BE25D660E5}
+		SolutionGuid = {17A97617-0EB1-466D-916E-57FE2040EB74}
 	EndGlobalSection
 EndGlobal
