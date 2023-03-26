@@ -97,7 +97,7 @@ dotnet_naming_symbols.static_fields.applicable_accessibilities = private, protec
 dotnet_naming_style.static_field_style.capitalization = camel_case
 dotnet_naming_style.static_field_style.required_prefix =
 
-file_header_template = MauiNodeEditor a customizable node editor for .NET MAUI.\n Copyright (C) 2023 Gabriele Messina
+file_header_template =
 
 # RS0016: Only enable if API files are present
 dotnet_public_api_analyzer.require_api_files = true
