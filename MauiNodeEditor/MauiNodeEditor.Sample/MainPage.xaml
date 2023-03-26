@@ -5,9 +5,5 @@
              xmlns:local="clr-namespace:MauiNodeEditor.Utils;assembly=MauiNodeEditor"
              x:Class="MauiNodeEditor.Sample.MainPage">
 
-    <StackLayout BackgroundColor="blue">
-        <local:PanContainer BackgroundColor="red" HeightRequest="1000" WidthRequest="1000">
-            <Image Source="dotnet_bot.png" WidthRequest="200" HeightRequest="200" BackgroundColor="Yellow" />
-        </local:PanContainer>
-    </StackLayout>
+    <component:NodeEditor BackgroundColor="Orange"></component:NodeEditor>
 </ContentPage>
