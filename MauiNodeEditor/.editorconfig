@@ -71,7 +71,7 @@ dotnet_naming_symbols.public_symbols.applicable_accessibilities = public, intern
 dotnet_naming_style.first_word_upper_case_style.capitalization = first_word_upper
 
 dotnet_naming_rule.public_members_must_be_capitalized.symbols   = public_symbols
-dotnet_naming_rule.public_members_must_be_capitalized.style    = first_word_upper_case_style
+dotnet_naming_rule.public_members_must_be_capitalized.style = first_word_upper_case_style
 dotnet_naming_rule.public_members_must_be_capitalized.severity = suggestion
 
 ## Instance fields are camelCase
@@ -204,6 +204,16 @@ csharp_style_expression_bodied_lambdas = true:silent
 csharp_style_expression_bodied_local_functions = false:silent
 csharp_style_prefer_null_check_over_type_check = true:suggestion
 
+# IDE0010: Add missing cases
+dotnet_diagnostic.IDE0010.severity = warning
+
+# CS4014: Because this call is not awaited, execution of the current method continues before the call is completed
+dotnet_diagnostic.CS4014.severity = error
+
+# Add braces (IDE0011)
+csharp_prefer_braces = true
+dotnet_diagnostic.IDE0011.severity = error
+
 [src/{Compilers,ExpressionEvaluator,Scripting}/**Test**/*.{cs,vb}]
 
 # IDE0060: Remove unused parameter
@@ -276,9 +286,6 @@ dotnet_diagnostic.IDE2005.severity = warning
 
 # csharp_style_allow_blank_line_after_token_in_arrow_expression_clause_experimental
 dotnet_diagnostic.IDE2006.severity = warning
-
-# CS4014: Because this call is not awaited, execution of the current method continues before the call is completed
-dotnet_diagnostic.CS4014.severity = error
 
 [src/{VisualStudio}/**/*.{cs,vb}]
 # CA1822: Make member static
