@@ -5,7 +5,8 @@
       "fileSuffixToExtension": {
         "add": {
           "ViewModel.cs": [
-            ".cs"
+            ".cs",
+            ".xaml"
           ]
         }
       }
