@@ -4,6 +4,5 @@
              xmlns:component="clr-namespace:MauiNodeEditor;assembly=MauiNodeEditor"
              xmlns:local="clr-namespace:MauiNodeEditor.Utils;assembly=MauiNodeEditor"
              x:Class="MauiNodeEditor.Sample.MainPage">
-
-    <component:NodeEditor BackgroundColor="Orange"></component:NodeEditor>
+    <component:NodeEditor/>
 </ContentPage>

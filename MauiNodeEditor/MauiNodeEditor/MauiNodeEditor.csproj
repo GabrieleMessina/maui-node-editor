@@ -23,6 +23,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Node.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="NodeEditor.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

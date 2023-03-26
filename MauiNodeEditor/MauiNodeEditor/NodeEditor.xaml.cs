@@ -1,8 +1,10 @@
-﻿namespace MauiNodeEditor;
+﻿using MauiNodeEditor.Utils.XamlComponent;
 
-public partial class NodeEditor : ContentView
+namespace MauiNodeEditor;
+
+public partial class NodeEditor : ExtendedContentView<NodeEditorViewModel>
 {
-	public NodeEditor()
+    public NodeEditor()
 	{
 		InitializeComponent();
 	}
