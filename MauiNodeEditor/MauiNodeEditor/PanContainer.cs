@@ -1,8 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using MauiNodeEditor.Interfaces;
+using MauiNodeEditor.Utils.XamlComponent;
 using Microsoft.Maui.Controls.Shapes;
 
-namespace MauiNodeEditor.Utils.XamlComponent;
+namespace MauiNodeEditor;
 
 public class PanContainer : ExtendedContentView<PanContainerViewModel>, IPanContainer
 {
@@ -10,9 +11,9 @@ public class PanContainer : ExtendedContentView<PanContainerViewModel>, IPanCont
     private Node currentSelectedArrivalNode;
     private InputHandle currentSelectedStartingInputHandle;
     private InputHandle currentSelectedArrivalInputHandle;
-    private Point currentMousePosition = new Point();
+    private Point currentMousePosition = new();
     private GestureStatus currentGestureStatus = GestureStatus.Completed;
-    private Line currentCreatingEdge = new Line(0,0,100,100);
+    private Line currentCreatingEdge = new(0, 0, 100, 100);
     private AbsoluteLayout contentLayout = new();
 
 
@@ -82,7 +83,7 @@ public class PanContainer : ExtendedContentView<PanContainerViewModel>, IPanCont
         var pointerRecognizerForNodes = new PointerGestureRecognizer();
         pointerRecognizerForNodes.PointerEntered += PointerEnteredOnNode;
         pointerRecognizerForNodes.PointerExited += PointerExitedOnNode;
-        
+
         var pointerRecognizerForInputHandlers = new PointerGestureRecognizer();
         pointerRecognizerForInputHandlers.PointerEntered += PointerEnteredOnInputHandle;
         pointerRecognizerForInputHandlers.PointerExited += PointerExitedOnInputHandle;
@@ -100,14 +101,14 @@ public class PanContainer : ExtendedContentView<PanContainerViewModel>, IPanCont
     private void OnContainerPanUpdated(object sender, PanUpdatedEventArgs e)
     {
         currentGestureStatus = e.StatusType;
-        if(currentSelectedStartingNode == null) //pan the entire view
+        if (currentSelectedStartingNode == null) //pan the entire view
         {
             HandleContainerPan(e);
             return;
         }
         else
         {
-            if(currentSelectedStartingInputHandle == null) //pan the node
+            if (currentSelectedStartingInputHandle == null) //pan the node
             {
                 //TODO: there is the risk that not all the status type are redirect correctly.
                 //TODO: sender and this are the probably same.
@@ -170,7 +171,7 @@ public class PanContainer : ExtendedContentView<PanContainerViewModel>, IPanCont
         }
 
         //avoid to change element while moving the current one.
-        if(currentGestureStatus != GestureStatus.Running)
+        if (currentGestureStatus != GestureStatus.Running)
         {
             currentSelectedStartingNode = node;
         }
@@ -184,17 +185,17 @@ public class PanContainer : ExtendedContentView<PanContainerViewModel>, IPanCont
             currentSelectedStartingNode = null;
         }
     }
-    
+
     private void PointerEnteredOnInputHandle(object sender, PointerEventArgs e)
     {
         //avoid to change element while moving the current one.
         var inputHandler = sender as InputHandle;
-        if(currentSelectedStartingInputHandle != null && currentSelectedStartingInputHandle != inputHandler && currentGestureStatus == GestureStatus.Running)
+        if (currentSelectedStartingInputHandle != null && currentSelectedStartingInputHandle != inputHandler && currentGestureStatus == GestureStatus.Running)
         {
             currentSelectedArrivalInputHandle = inputHandler;
         }
 
-        if(currentGestureStatus != GestureStatus.Running)
+        if (currentGestureStatus != GestureStatus.Running)
         {
             currentSelectedStartingInputHandle = inputHandler;
         }
@@ -203,7 +204,7 @@ public class PanContainer : ExtendedContentView<PanContainerViewModel>, IPanCont
     private void PointerExitedOnInputHandle(object sender, PointerEventArgs e)
     {
         //avoid to change element while moving the current one.
-        if (currentGestureStatus!= GestureStatus.Running && currentSelectedStartingInputHandle == sender)
+        if (currentGestureStatus != GestureStatus.Running && currentSelectedStartingInputHandle == sender)
         {
             currentSelectedStartingInputHandle = null;
         }
@@ -254,11 +255,11 @@ public class PanContainer : ExtendedContentView<PanContainerViewModel>, IPanCont
         view.TranslationX = maxXOccupied;
         view.TranslationY = maxYOccupied;
 
-        if (maxXOccupied < this.Width - spawnPadding)
+        if (maxXOccupied < Width - spawnPadding)
         {
             maxXOccupied += view.Width;
         }
-        else if (maxYOccupied < this.Height - spawnPadding)
+        else if (maxYOccupied < Height - spawnPadding)
         {
             maxXOccupied = 0d;
             maxYOccupied += view.Height;
@@ -272,8 +273,8 @@ public class PanContainer : ExtendedContentView<PanContainerViewModel>, IPanCont
     private static readonly Random randomGenerator = new();
     private void HandleSpawnRandom(View view)
     {
-        view.TranslationX = randomGenerator.NextDouble() * this.Width;
-        view.TranslationY = randomGenerator.NextDouble() * this.Height;
+        view.TranslationX = randomGenerator.NextDouble() * Width;
+        view.TranslationY = randomGenerator.NextDouble() * Height;
     }
 
     private void ResetSpawn()

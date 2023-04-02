@@ -1,4 +1,4 @@
-﻿namespace MauiNodeEditor;
+﻿namespace MauiNodeEditor.Interfaces;
 
 public interface IPanContainer
 {

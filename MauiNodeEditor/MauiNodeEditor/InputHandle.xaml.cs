@@ -2,8 +2,8 @@
 
 public partial class InputHandle : ContentView
 {
-	public InputHandle()
-	{
-		InitializeComponent();
-	}
+    public InputHandle()
+    {
+        InitializeComponent();
+    }
 }

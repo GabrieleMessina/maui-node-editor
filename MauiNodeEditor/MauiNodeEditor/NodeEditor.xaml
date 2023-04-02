@@ -8,7 +8,7 @@
     x:DataType="components:NodeEditorViewModel"
     x:Class="MauiNodeEditor.NodeEditor">
     <StackLayout>
-        <local:PanContainer BackgroundColor="DarkSlateGray" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <components:PanContainer BackgroundColor="DarkSlateGray" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
             <AbsoluteLayout x:Name="NodeContainer">
                 <components:Node Title="N1" WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
                 <components:Node Title="N2" WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
@@ -27,6 +27,6 @@
                 <components:Node Title="N15" WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
                 <components:Node Title="N16" WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
             </AbsoluteLayout>
-        </local:PanContainer>
+        </components:PanContainer>
     </StackLayout>
 </local:ExtendedContentView>
