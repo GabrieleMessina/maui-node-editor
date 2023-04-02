@@ -8,24 +8,24 @@
     x:DataType="components:NodeEditorViewModel"
     x:Class="MauiNodeEditor.NodeEditor">
     <StackLayout>
-        <local:PanContainer BackgroundColor="DarkSlateGray"  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-            <AbsoluteLayout>
-                <components:Node WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
-                <components:Node WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
-                <components:Node WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
-                <components:Node WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
-                <components:Node WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
-                <components:Node WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
-                <components:Node WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
-                <components:Node WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
-                <components:Node WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
-                <components:Node WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
-                <components:Node WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
-                <components:Node WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
-                <components:Node WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
-                <components:Node WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
-                <components:Node WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
-                <components:Node WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
+        <local:PanContainer BackgroundColor="DarkSlateGray" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <AbsoluteLayout x:Name="NodeContainer">
+                <components:Node Title="N1" WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
+                <components:Node Title="N2" WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
+                <components:Node Title="N3" WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
+                <components:Node Title="N4" WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
+                <components:Node Title="N5" WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
+                <components:Node Title="N6" WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
+                <components:Node Title="N7" WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
+                <components:Node Title="N8" WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
+                <components:Node Title="N9" WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
+                <components:Node Title="N10" WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
+                <components:Node Title="N11" WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
+                <components:Node Title="N12" WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
+                <components:Node Title="N13" WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
+                <components:Node Title="N14" WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
+                <components:Node Title="N15" WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
+                <components:Node Title="N16" WidthRequest="200" HeightRequest="200" HorizontalOptions="Start" VerticalOptions="Start"/>
             </AbsoluteLayout>
         </local:PanContainer>
     </StackLayout>

@@ -2,6 +2,18 @@
 
 public class ExtendedContentView : ContentView
 {
+    protected ExtendedContentView() : base()
+    {
+        BindingContext = this;
+    }
+
+    protected virtual void OnInitialized() { }
+
+    protected override void OnHandlerChanged()
+    {
+        base.OnHandlerChanged();
+        OnInitialized();
+    }
 }
 
 public class ExtendedContentView<TViewModel> : ExtendedContentView where TViewModel : IViewModel, new()

@@ -1,6 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-
-namespace MauiNodeEditor.Utils.XamlComponent;
+﻿namespace MauiNodeEditor.Utils.XamlComponent;
 
 public partial class PanContainerViewModel : IViewModel
 {
