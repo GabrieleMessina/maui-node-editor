@@ -56,4 +56,16 @@
 	  <ProjectReference Include="..\MauiNodeEditor\MauiNodeEditor.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="MainPage2.xaml.cs">
+	    <DependentUpon>MainPage2.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="MainPage2.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
 </Project>

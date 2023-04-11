@@ -6,9 +6,16 @@
     xmlns:local="clr-namespace:MauiNodeEditor.Sample"
     Shell.FlyoutBehavior="Disabled">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
-
+    <TabBar>
+        <Tab>
+            <ShellContent
+                Title="Component"
+                ContentTemplate="{DataTemplate local:MainPage}"
+                Route="MainPage" />
+            <ShellContent
+                Title="Test"
+                ContentTemplate="{DataTemplate local:MainPage2}"
+                Route="MainPage2" />
+        </Tab>
+    </TabBar>
 </Shell>

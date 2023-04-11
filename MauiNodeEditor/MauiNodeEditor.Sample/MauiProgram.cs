@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Maui;
+using MauiNodeEditor.Extensions;
 using Microsoft.Extensions.Logging;
+
 
 namespace MauiNodeEditor.Sample;
 public static class MauiProgram
@@ -10,6 +12,7 @@ public static class MauiProgram
         builder
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
+            .UseMauiNodeEditor()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
