@@ -1,5 +1,8 @@
 ﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using MauiNodeEditor.EventArgs;
 using MauiNodeEditor.Interfaces;
+using MauiNodeEditor.Utils;
 using MauiNodeEditor.Utils.XamlComponent;
 using Microsoft.Maui.Controls.Shapes;
 
@@ -7,15 +10,9 @@ namespace MauiNodeEditor;
 
 public class PanContainer : ExtendedContentView<PanContainerViewModel>, IPanContainer
 {
-    private Node currentSelectedStartingNode;
-    private Node currentSelectedArrivalNode;
-    private InputHandle currentSelectedStartingInputHandle;
-    private InputHandle currentSelectedArrivalInputHandle;
     private Point currentMousePosition = new();
     private GestureStatus currentGestureStatus = GestureStatus.Completed;
-    private Line currentCreatingEdge = new(0, 0, 100, 100);
     private AbsoluteLayout contentLayout = new();
-
 
     public static readonly BindableProperty NodesProperty = BindableProperty.Create(nameof(Nodes), typeof(ObservableCollection<Node>), typeof(PanContainer), new ObservableCollection<Node>(), propertyChanged: OnNodesChanged);
 
@@ -36,40 +33,59 @@ public class PanContainer : ExtendedContentView<PanContainerViewModel>, IPanCont
         pointerGesture.PointerMoved += OnPointerMoved;
         GestureRecognizers.Add(pointerGesture);
 
-        Unfocused += PanContainer_Unfocused;
+        ViewModel.Edges.CollectionChanged += Edges_CollectionChanged;
     }
 
-    protected override void OnInitialized()
+    private void Edges_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-        base.OnInitialized();
-
-        if (Handler != null)
+        if(e.Action == NotifyCollectionChangedAction.Remove)
         {
-            currentCreatingEdge.Stroke = Brush.Red;
-            currentCreatingEdge.StrokeThickness = 3;
-            currentCreatingEdge.ZIndex = 30000;
-            (Content as AbsoluteLayout).Add(currentCreatingEdge);
+            foreach (var edge in e.OldItems.OfType<Line>())
+            {
+                contentLayout.Remove(edge);
+            }
         }
-    }
 
-    private static void OnNodesChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-    }
-
-    private void PanContainer_Unfocused(object sender, FocusEventArgs e)
-    {
-        ResetEdgeCreation();
-    }
-
-    private void OnPointerMoved(object sender, PointerEventArgs e)
-    {
-        currentMousePosition = e.GetPosition(this) ?? currentMousePosition;
-    }
-
-    private void ResetEdgeCreation()
-    {
-        currentSelectedStartingInputHandle = null;
-        currentSelectedArrivalInputHandle = null;
+        if (e.Action == NotifyCollectionChangedAction.Add)
+        {
+            foreach (var edge in e.NewItems.OfType<Line>())
+            {
+                edge.Stroke = Brush.Red;
+                edge.StrokeThickness = 3;
+                edge.ZIndex = 100;
+                contentLayout.Add(edge);
+            }
+        }
+        
+        if (e.Action == NotifyCollectionChangedAction.Replace || e.Action == NotifyCollectionChangedAction.Move)
+        {
+            foreach (var edge in e.OldItems.OfType<Line>())
+            {
+                contentLayout.Remove(edge);
+            }
+            foreach (var edge in e.NewItems.OfType<Line>())
+            {
+                edge.Stroke = Brush.Red;
+                edge.StrokeThickness = 3;
+                edge.ZIndex = 100;
+                contentLayout.Add(edge);
+            }
+        }
+        
+        if (e.Action == NotifyCollectionChangedAction.Reset)
+        {
+            foreach (var edge in ViewModel.Edges)
+            {
+                contentLayout.Remove(edge);
+            }
+            foreach (var edge in e.NewItems.OfType<Line>())
+            {
+                edge.Stroke = Brush.Red;
+                edge.StrokeThickness = 3;
+                edge.ZIndex = 100;
+                contentLayout.Add(edge);
+            }
+        }
     }
 
     protected override void OnChildAdded(Element child)
@@ -77,138 +93,154 @@ public class PanContainer : ExtendedContentView<PanContainerViewModel>, IPanCont
         base.OnChildAdded(child);
 
         var children = child as Layout;
-        contentLayout = child as AbsoluteLayout;
-
-        //pointer recognizers needed for selecting the currentSelectedElement
-        var pointerRecognizerForNodes = new PointerGestureRecognizer();
-        pointerRecognizerForNodes.PointerEntered += PointerEnteredOnNode;
-        pointerRecognizerForNodes.PointerExited += PointerExitedOnNode;
-
-        var pointerRecognizerForInputHandlers = new PointerGestureRecognizer();
-        pointerRecognizerForInputHandlers.PointerEntered += PointerEnteredOnInputHandle;
-        pointerRecognizerForInputHandlers.PointerExited += PointerExitedOnInputHandle;
 
         foreach (var view in children.OfType<Node>())
         {
-            view.GestureRecognizers.Add(pointerRecognizerForNodes);
-
-            view.InputHandle.GestureRecognizers.Add(pointerRecognizerForInputHandlers);
-
             Nodes.Add(view);
         }
+    }
+
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        contentLayout = Content as AbsoluteLayout;
+
+        if (Handler != null)
+        {
+            foreach (var view in Nodes)
+            {
+                GestureManager.SubscribeToPointerPressed(view, NodePointerPressed);
+                GestureManager.SubscribeToPointerReleased(view, NodePointerReleased);
+                
+                GestureManager.SubscribeToPointerPressed(view.InputHandle, InputHandlePointerPressed);
+                GestureManager.SubscribeToPointerReleased(view.InputHandle, InputHandlePointerReleased);
+            }
+        }
+    }
+
+    private static void OnNodesChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+    }
+
+    private void OnPointerMoved(object sender, PointerEventArgs e)
+    {
+        currentMousePosition = e.GetPosition(this) ?? currentMousePosition;
     }
 
     private void OnContainerPanUpdated(object sender, PanUpdatedEventArgs e)
     {
         currentGestureStatus = e.StatusType;
-        if (currentSelectedStartingNode == null) //pan the entire view
+
+        if (ViewModel.SelectedNode == null && ViewModel.StartHandle == null) //pan the entire view
         {
             HandleContainerPan(e);
-            return;
         }
         else
         {
-            if (currentSelectedStartingInputHandle == null) //pan the node
-            {
-                //TODO: there is the risk that not all the status type are redirect correctly.
-                //TODO: sender and this are the probably same.
-                (currentSelectedStartingNode as PannableContent).HandlePanUpdate(sender, e, this);
-                return;
-            }
-            else //create an adge
+            if (ViewModel.StartHandle != null)//create an adge 
             {
                 HandleEdgeDrawing(currentGestureStatus);
             }
+            else //pan the node
+            {
+                //TODO: there is the risk that not all the status type are redirect correctly.
+                //TODO: sender and this are the probably same.
+                (ViewModel.SelectedNode as PannableContent).HandlePanUpdate(sender, e, this);
+            }
         }
 
+        InvalidateLayout();
     }
 
     private const double edgeLinePadding = 10d; //this is needed for allow the cursor to actualy going upon input handlers and trigger the gesture recognizer, otherwise the line is alway behind the cursor.
     private void HandleEdgeDrawing(GestureStatus currentGestureStatus)
     {
-        if (currentGestureStatus == GestureStatus.Started)
-        {
-            currentCreatingEdge.X1 = currentSelectedStartingNode.TranslationX + currentSelectedStartingNode.Width - (currentSelectedStartingNode.Width - (currentSelectedStartingInputHandle.X + currentSelectedStartingInputHandle.Width));
-            currentCreatingEdge.Y1 = currentSelectedStartingNode.TranslationY + currentSelectedStartingNode.Height - (currentSelectedStartingNode.Height - (currentSelectedStartingInputHandle.Y + currentSelectedStartingInputHandle.Height));
-            currentCreatingEdge.IsVisible = true;
-        }
-        if (currentGestureStatus == GestureStatus.Running)
-        {
-            currentCreatingEdge.X2 = currentMousePosition.X;
-            currentCreatingEdge.Y2 = currentMousePosition.Y;
+        //if (currentGestureStatus == GestureStatus.Started)
+        //{
+        //    currentCreatingEdge.X1 = currentCreatingEdge.X2 = currentSelectedStartingNode.TranslationX + currentSelectedStartingNode.Width - (currentSelectedStartingNode.Width - (currentSelectedStartingInputHandle.X + currentSelectedStartingInputHandle.Width));
+        //    currentCreatingEdge.Y1 = currentCreatingEdge.Y2 = currentSelectedStartingNode.TranslationY + currentSelectedStartingNode.Height - (currentSelectedStartingNode.Height - (currentSelectedStartingInputHandle.Y + currentSelectedStartingInputHandle.Height));
+        //    currentCreatingEdge.IsVisible = true;
+        //}
+        //if (currentGestureStatus == GestureStatus.Running)
+        //{
+        //    currentCreatingEdge.X2 = currentMousePosition.X;
+        //    currentCreatingEdge.Y2 = currentMousePosition.Y;
 
-        }
-        if (currentGestureStatus == GestureStatus.Completed)
-        {
-            if (currentSelectedArrivalInputHandle != null)
-            {
-                currentCreatingEdge.X2 = currentSelectedArrivalNode.TranslationX + currentSelectedArrivalNode.Width - (currentSelectedArrivalNode.Width - (currentSelectedArrivalInputHandle.X + currentSelectedArrivalInputHandle.Width)) + edgeLinePadding;
-                currentCreatingEdge.Y2 = currentSelectedArrivalNode.TranslationY + currentSelectedArrivalNode.Height - (currentSelectedArrivalNode.Height - (currentSelectedArrivalInputHandle.Y + currentSelectedArrivalInputHandle.Height)) + edgeLinePadding;
-                ResetEdgeCreation();
-            }
-            else
-            {
-                ResetEdgeCreation();
-                currentCreatingEdge.IsVisible = false;
-            }
-        }
-        if (currentGestureStatus == GestureStatus.Canceled)
-        {
-            ResetEdgeCreation();
-            currentCreatingEdge.IsVisible = false;
-        }
-        InvalidateLayout();
+        //    var angle = MathF.Atan((float)(currentCreatingEdge.Y2 - currentCreatingEdge.Y1) / (float)(currentCreatingEdge.X2 - currentCreatingEdge.X1));
+        //    var sin = MathF.Sin(angle);
+        //    var cos = MathF.Cos(angle);
+
+        //    if(sin > 0)
+        //    {
+        //        currentCreatingEdge.Y2 -= edgeLinePadding;
+        //    }
+        //    else
+        //    {
+        //        currentCreatingEdge.Y2 += edgeLinePadding;
+        //    }
+            
+        //    if(cos > 0)
+        //    {
+        //        currentCreatingEdge.X2 -= edgeLinePadding;
+        //    }
+        //    else
+        //    {
+        //        currentCreatingEdge.X2 += edgeLinePadding;
+        //    }
+        //}
+        //if (currentGestureStatus == GestureStatus.Completed)
+        //{
+        //    if (currentSelectedArrivalInputHandle != null)
+        //    {
+        //        currentCreatingEdge.X2 = currentSelectedArrivalNode.TranslationX + currentSelectedArrivalNode.Width - (currentSelectedArrivalNode.Width - (currentSelectedArrivalInputHandle.X + currentSelectedArrivalInputHandle.Width));
+        //        currentCreatingEdge.Y2 = currentSelectedArrivalNode.TranslationY + currentSelectedArrivalNode.Height - (currentSelectedArrivalNode.Height - (currentSelectedArrivalInputHandle.Y + currentSelectedArrivalInputHandle.Height));
+        //    }
+        //    else
+        //    {
+        //        currentCreatingEdge.IsVisible = false;
+        //    }
+        //}
+        //if (currentGestureStatus == GestureStatus.Canceled)
+        //{
+        //    currentCreatingEdge.IsVisible = false;
+        //}
     }
 
 
     #region Choose CurrentSelectedElement
-    private void PointerEnteredOnNode(object sender, PointerEventArgs e)
+    private void NodePointerPressed(object sender, PointerPressedEventArgs e)
     {
         var node = sender as Node;
-        if (currentSelectedStartingNode != null && currentSelectedStartingNode != node && currentGestureStatus == GestureStatus.Running)
-        {
-            currentSelectedArrivalNode = node;
-        }
-
-        //avoid to change element while moving the current one.
-        if (currentGestureStatus != GestureStatus.Running)
-        {
-            currentSelectedStartingNode = node;
-        }
+        ViewModel.SelectedNode = node;
     }
 
-    private void PointerExitedOnNode(object sender, PointerEventArgs e)
+    private void NodePointerReleased(object sender, PointerPressedEventArgs e)
     {
         //avoid to change element while moving the current one.
-        if (currentGestureStatus != GestureStatus.Running && currentSelectedStartingNode == sender)
-        {
-            currentSelectedStartingNode = null;
-        }
+        ViewModel.SelectedNode = null;
     }
 
-    private void PointerEnteredOnInputHandle(object sender, PointerEventArgs e)
+
+    private void InputHandlePointerPressed(object sender, PointerPressedEventArgs e)
     {
-        //avoid to change element while moving the current one.
-        var inputHandler = sender as InputHandle;
-        if (currentSelectedStartingInputHandle != null && currentSelectedStartingInputHandle != inputHandler && currentGestureStatus == GestureStatus.Running)
-        {
-            currentSelectedArrivalInputHandle = inputHandler;
-        }
-
-        if (currentGestureStatus != GestureStatus.Running)
-        {
-            currentSelectedStartingInputHandle = inputHandler;
-        }
+        var inputHandle = sender as InputHandle;
+        
+        ViewModel.StartHandle = inputHandle;
     }
-
-    private void PointerExitedOnInputHandle(object sender, PointerEventArgs e)
+    
+    private void InputHandlePointerReleased(object sender, PointerPressedEventArgs e)
     {
-        //avoid to change element while moving the current one.
-        if (currentGestureStatus != GestureStatus.Running && currentSelectedStartingInputHandle == sender)
+        var inputHandle = sender as InputHandle;
+
+        if (ViewModel.StartHandle != null && ViewModel.StartHandle != inputHandle) 
         {
-            currentSelectedStartingInputHandle = null;
+            ViewModel.ArrivalHandle = inputHandle;
+            ViewModel.SubmitNewEdge();
         }
     }
+
     #endregion Choose CurrentSelectedElement
 
     #region Container Pan Handling

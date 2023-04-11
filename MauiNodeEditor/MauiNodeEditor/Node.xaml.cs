@@ -1,8 +1,9 @@
 ﻿using MauiNodeEditor.Interfaces;
+using MauiNodeEditor.Utils.XamlComponent;
 
 namespace MauiNodeEditor;
 
-public partial class Node : ContentView, PannableContent
+public partial class Node : ExtendedContentView, PannableContent
 {
     public static readonly BindableProperty TitleProperty = BindableProperty.Create(nameof(Title), typeof(string), typeof(Node));
 
@@ -18,7 +19,7 @@ public partial class Node : ContentView, PannableContent
     public Node()
     {
         InitializeComponent();
-        BindingContext = this;
+        inputHandle.ParentNode = this;
     }
 
     public void HandlePanUpdate(object sender, PanUpdatedEventArgs e, IPanContainer container)
