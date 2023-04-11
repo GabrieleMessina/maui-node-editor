@@ -1,7 +1,19 @@
-﻿namespace MauiNodeEditor.Utils.XamlComponent;
+﻿#if WINDOWS
+using Microsoft.UI.Xaml;
+#endif
+
+namespace MauiNodeEditor.Utils.XamlComponent;
 
 public class ExtendedContentView : ContentView
 {
+    //public static readonly BindableProperty AreTransportControlsEnabledProperty =
+    //        BindableProperty.Create(nameof(AreTransportControlsEnabled), typeof(bool), typeof(Video), true);
+
+    //public bool AreTransportControlsEnabled
+    //{
+    //    get { return (bool)GetValue(AreTransportControlsEnabledProperty); }
+    //    set { SetValue(AreTransportControlsEnabledProperty, value); }
+    //}
     protected ExtendedContentView() : base()
     {
         BindingContext = this;
@@ -22,6 +34,7 @@ public class ExtendedContentView<TViewModel> : ExtendedContentView where TViewMo
 
     protected ExtendedContentView() : base()
     {
+        //TODO: bind to this
         BindingContext = new TViewModel();
     }
 }

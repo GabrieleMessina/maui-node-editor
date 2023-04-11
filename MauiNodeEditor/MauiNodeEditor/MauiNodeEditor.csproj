@@ -24,9 +24,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Update="NodeEditorCanvas.xaml.cs">
-            <DependentUpon>NodeEditorCanvas.xaml</DependentUpon>
-        </Compile>
         <Compile Update="NodeEditor.xaml.cs">
             <DependentUpon>NodeEditor.xaml</DependentUpon>
         </Compile>
@@ -37,9 +34,6 @@
             <Generator>MSBuild:Compile</Generator>
         </MauiXaml>
         <MauiXaml Update="Node.xaml">
-            <Generator>MSBuild:Compile</Generator>
-        </MauiXaml>
-        <MauiXaml Update="NodeEditorCanvas.xaml">
             <Generator>MSBuild:Compile</Generator>
         </MauiXaml>
         <MauiXaml Update="NodeEditor.xaml">
@@ -75,5 +69,8 @@
     <ItemGroup Condition="$(TargetFramework.Contains('-windows')) != true">
         <Compile Remove="**\*.Windows.cs" />
         <None Include="**\*.Windows.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Handlers\" />
     </ItemGroup>
 </Project>
