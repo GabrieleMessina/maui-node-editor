@@ -1,6 +1,4 @@
-﻿using SkiaSharp.Views.Maui.Handlers;
-
-namespace MauiNodeEditor.Extensions;
+﻿namespace MauiNodeEditor.Extensions;
 
 public static class MauiAppBuilderExtensions
 {
@@ -10,20 +8,8 @@ public static class MauiAppBuilderExtensions
         builder.Services.AddViewModels();
         builder.Services.AddPages();
         builder.ConfigureCustomHandler();
-        builder.UseNodeEditorDrawable();
         return builder;
     }
-
-    public static MauiAppBuilder UseNodeEditorDrawable(this MauiAppBuilder builder)
-    {
-        builder.ConfigureMauiHandlers(h =>
-        {
-            h.AddHandler<NodeEditorSKDrawable, SKCanvasViewHandler>();
-        });
-
-        return builder;
-    }
-
 
     private static MauiAppBuilder ConfigureCustomHandler(this MauiAppBuilder builder)
     {
